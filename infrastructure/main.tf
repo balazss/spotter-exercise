@@ -117,7 +117,7 @@ module "alb_client" {
 
 # ------- ECS Role -------
 module "ecs_role" {
-  source             = "./Modules/IAM"
+  source             = "./modules/IAM"
   create_ecs_role    = true
   name               = var.iam_role_name["ecs"]
   name_ecs_task_role = var.iam_role_name["ecs_task_role"]
@@ -130,4 +130,15 @@ module "ecs_role_policy" {
   name          = "ecs-ecr-${var.environment_name}"
   create_policy = true
   attach_to     = module.ecs_role.name_role
+}
+
+module "ecr_server" {
+  source = "./modules/ECR"
+  name   = "repo-server"
+}
+
+# ------- Creating client ECR Repository to store Docker Images -------
+module "ecr_client" {
+  source = "./modules/ECR"
+  name   = "repo-client"
 }
