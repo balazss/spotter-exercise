@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  spotter-exercise-backend:
+    build:
+      context: .
+      args:
+        NODE_ENV: ${NODE_ENV}
+        PORT: ${PORT}
+        DB_HOST: ${DB_HOST}
+        POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      # - ./:/app:ro
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - ./.env.development
+    # command: npm run dev
+    # command: npm run start:migrate:dev
+    command: sh ./prisma/wait_for_db.sh ${DB_HOST} ${POSTGRES_USER} npm run start:migrate:dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  spotterdb:
+    image: postgres:15.1-alpine
+    container_name: spotterdb
+    env_file:
+      - ./.env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  dbdata:
+    driver: local
