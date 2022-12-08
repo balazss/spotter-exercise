@@ -171,3 +171,23 @@ module "ecs_taks_definition_client" {
   container_port     = var.port_app_client
 }
 
+# ------- Creating a server Security Group for ECS TASKS -------
+module "security_group_ecs_task_server" {
+  source          = "./Modules/SecurityGroup"
+  name            = "ecs-task-${var.environment_name}-server"
+  description     = "Controls access to the server ECS task"
+  vpc_id          = module.networking.aws_vpc
+  ingress_port    = var.port_app_server
+  security_groups = [module.security_group_alb_server.sg_id]
+}
+# ------- Creating a client Security Group for ECS TASKS -------
+module "security_group_ecs_task_client" {
+  source          = "./Modules/SecurityGroup"
+  name            = "ecs-task-${var.environment_name}-client"
+  description     = "Controls access to the client ECS task"
+  vpc_id          = module.networking.aws_vpc
+  ingress_port    = var.port_app_client
+  security_groups = [module.security_group_alb_client.sg_id]
+}
+
+
