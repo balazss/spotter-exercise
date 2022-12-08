@@ -250,6 +250,6 @@ module "ecs_autoscaling_client" {
 
 # ------- Creating Bucket to store CodePipeline artifacts -------
 module "s3_codepipeline" {
-  source      = "./Modules/S3"
+  source      = "./modules/S3"
   bucket_name = "codepipeline-${var.aws_region}-${random_id.RANDOM_ID.hex}"
 }
