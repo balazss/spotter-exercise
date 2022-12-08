@@ -173,7 +173,7 @@ module "ecs_taks_definition_client" {
 
 # ------- Creating a server Security Group for ECS TASKS -------
 module "security_group_ecs_task_server" {
-  source          = "./Modules/SecurityGroup"
+  source          = "./modules/SecurityGroup"
   name            = "ecs-task-${var.environment_name}-server"
   description     = "Controls access to the server ECS task"
   vpc_id          = module.networking.aws_vpc
@@ -182,7 +182,7 @@ module "security_group_ecs_task_server" {
 }
 # ------- Creating a client Security Group for ECS TASKS -------
 module "security_group_ecs_task_client" {
-  source          = "./Modules/SecurityGroup"
+  source          = "./modules/SecurityGroup"
   name            = "ecs-task-${var.environment_name}-client"
   description     = "Controls access to the client ECS task"
   vpc_id          = module.networking.aws_vpc
@@ -190,4 +190,8 @@ module "security_group_ecs_task_client" {
   security_groups = [module.security_group_alb_client.sg_id]
 }
 
-
+# ------- Creating ECS Cluster -------
+module "ecs_cluster" {
+  source = "./Modules/ECS/Cluster"
+  name   = var.environment_name
+}
