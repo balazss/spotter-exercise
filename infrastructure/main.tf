@@ -253,3 +253,28 @@ module "s3_codepipeline" {
   source      = "./modules/S3"
   bucket_name = "codepipeline-${var.aws_region}-${random_id.RANDOM_ID.hex}"
 }
+
+# ------- Creating IAM roles used during the pipeline excecution -------
+module "devops_role" {
+  source             = "./modules/IAM"
+  create_devops_role = true
+  name               = var.iam_role_name["devops"]
+}
+
+module "codedeploy_role" {
+  source                 = "./modules/IAM"
+  create_codedeploy_role = true
+  name                   = var.iam_role_name["codedeploy"]
+}
+
+# ------- Creating an IAM Policy for role ------- 
+module "policy_devops_role" {
+  source                = "./modules/IAM"
+  name                  = "devops-${var.environment_name}"
+  create_policy         = true
+  attach_to             = module.devops_role.name_role
+  create_devops_policy  = true
+  ecr_repositories      = [module.ecr_server.ecr_repository_arn, module.ecr_client.ecr_repository_arn]
+  code_build_projects   = [module.codebuild_client.project_arn, module.codebuild_server.project_arn]
+  code_deploy_resources = [module.codedeploy_server.application_arn, module.codedeploy_server.deployment_group_arn, module.codedeploy_client.application_arn, module.codedeploy_client.deployment_group_arn]
+}
