@@ -345,3 +345,23 @@ module "codedeploy_client" {
   sns_topic_arn   = module.sns.sns_arn
   codedeploy_role = module.codedeploy_role.arn_role_codedeploy
 }
+
+# ------- Creating CodePipeline -------
+module "codepipeline" {
+  source                   = "./modules/CodePipeline"
+  name                     = "pipeline-${var.environment_name}"
+  pipe_role                = module.devops_role.arn_role
+  s3_bucket                = module.s3_codepipeline.s3_bucket_id
+  github_token             = var.github_token
+  repo_owner               = var.repository_owner
+  repo_name                = var.repository_name
+  branch                   = var.repository_branch
+  codebuild_project_server = module.codebuild_server.project_id
+  codebuild_project_client = module.codebuild_client.project_id
+  app_name_server          = module.codedeploy_server.application_name
+  app_name_client          = module.codedeploy_client.application_name
+  deployment_group_server  = module.codedeploy_server.deployment_group_name
+  deployment_group_client  = module.codedeploy_client.deployment_group_name
+
+  depends_on = [module.policy_devops_role]
+}
