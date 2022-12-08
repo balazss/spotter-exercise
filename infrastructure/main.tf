@@ -319,3 +319,29 @@ module "codebuild_client" {
   ecs_role               = var.iam_role_name["ecs"]
   server_alb_url         = module.alb_server.dns_alb
 }
+
+# ------- Creating the server CodeDeploy project -------
+module "codedeploy_server" {
+  source          = "./modules/CodeDeploy"
+  name            = "Deploy-${var.environment_name}-server"
+  ecs_cluster     = module.ecs_cluster.ecs_cluster_name
+  ecs_service     = module.ecs_service_server.ecs_service_name
+  alb_listener    = module.alb_server.arn_listener
+  tg_blue         = module.target_group_server_blue.tg_name
+  tg_green        = module.target_group_server_green.tg_name
+  sns_topic_arn   = module.sns.sns_arn
+  codedeploy_role = module.codedeploy_role.arn_role_codedeploy
+}
+
+# ------- Creating the client CodeDeploy project -------
+module "codedeploy_client" {
+  source          = "./modules/CodeDeploy"
+  name            = "Deploy-${var.environment_name}-client"
+  ecs_cluster     = module.ecs_cluster.ecs_cluster_name
+  ecs_service     = module.ecs_service_client.ecs_service_name
+  alb_listener    = module.alb_client.arn_listener
+  tg_blue         = module.target_group_client_blue.tg_name
+  tg_green        = module.target_group_client_green.tg_name
+  sns_topic_arn   = module.sns.sns_arn
+  codedeploy_role = module.codedeploy_role.arn_role_codedeploy
+}
