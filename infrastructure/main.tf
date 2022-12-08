@@ -142,3 +142,32 @@ module "ecr_client" {
   source = "./modules/ECR"
   name   = "repo-client"
 }
+
+# ------- Creating ECS Task Definition for the server -------
+module "ecs_taks_definition_server" {
+  source             = "./modules/ECS/TaskDefinition"
+  name               = "${var.environment_name}-server"
+  container_name     = var.container_name["server"]
+  execution_role_arn = module.ecs_role.arn_role
+  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
+  cpu                = 256
+  memory             = "512"
+  docker_repo        = module.ecr_server.ecr_repository_url
+  region             = var.aws_region
+  container_port     = var.port_app_server
+}
+
+# ------- Creating ECS Task Definition for the client -------
+module "ecs_taks_definition_client" {
+  source             = "./modules/ECS/TaskDefinition"
+  name               = "${var.environment_name}-client"
+  container_name     = var.container_name["client"]
+  execution_role_arn = module.ecs_role.arn_role
+  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
+  cpu                = 256
+  memory             = "512"
+  docker_repo        = module.ecr_client.ecr_repository_url
+  region             = var.aws_region
+  container_port     = var.port_app_client
+}
+
