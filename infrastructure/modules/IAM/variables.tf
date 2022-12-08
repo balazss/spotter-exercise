@@ -64,11 +64,11 @@ variable "code_deploy_resources" {
   default     = ["*"]
 }
 
-variable "dynamodb_table" {
-  description = "The name of the Dynamodb table to which grant IAM access"
-  type        = list(string)
-  default     = ["*"]
-}
+# variable "dynamodb_table" {
+#   description = "The name of the Dynamodb table to which grant IAM access"
+#   type        = list(string)
+#   default     = ["*"]
+# }
 
 variable "s3_bucket_assets" {
   description = "The name of the S3 bucket to which grant IAM access"

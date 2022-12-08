@@ -8,6 +8,10 @@ variable "engine_version" {
   type = string
 }
 
+variable "family" {
+  type = string
+}
+
 variable "instance_class" {
   type = string
 }

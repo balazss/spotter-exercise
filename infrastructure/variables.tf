@@ -89,3 +89,27 @@ variable "repository_branch" {
   type        = string
   default     = "main"
 }
+
+variable "db_name" {
+  description = "The name of the database"
+  type        = string
+  default     = "spotter"
+}
+
+variable "db_username" {
+  description = "The username of the database"
+  type        = string
+  default     = "spotter"
+}
+
+variable "db_password" {
+  description = "The password of the database"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_port" {
+  description = "The port of the database"
+  type        = number
+  default     = 5432
+}

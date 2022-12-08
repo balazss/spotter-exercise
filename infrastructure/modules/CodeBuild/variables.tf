@@ -62,8 +62,8 @@ variable "ecs_task_role" {
   default     = "null"
 }
 
-variable "dynamodb_table_name" {
-  description = "The name of Dynamodb table used by the server application"
+variable "db_host" {
+  description = "The endpoint for the RDS instance used by the server application"
   type        = string
   default     = ""
 }

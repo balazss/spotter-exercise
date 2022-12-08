@@ -1,5 +1,5 @@
 resource "aws_db_instance" "db" {
-  identifier = "prod-db"
+  identifier = "spotterdb"
 
   allocated_storage = var.allocated_storage
   db_name           = var.db_name
@@ -17,7 +17,8 @@ resource "aws_db_instance" "db" {
   db_subnet_group_name   = aws_db_subnet_group.default.name
   parameter_group_name   = aws_db_parameter_group.default.name
   # option_group_name = var.option_group_name # TODO: Figure out what this is
-  network_type = "IPV4"
+  storage_encrypted = false
+  network_type      = "IPV4"
 
   multi_az = var.multi_az # Probably false
 

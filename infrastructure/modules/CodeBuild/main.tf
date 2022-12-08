@@ -39,8 +39,8 @@ resource "aws_codebuild_project" "aws_codebuild" {
     }
 
     environment_variable {
-      name  = "DYNAMODB_TABLE"
-      value = var.dynamodb_table_name
+      name  = "DB_HOST"
+      value = var.db_host
     }
 
     environment_variable {
