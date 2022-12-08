@@ -5,3 +5,8 @@ github_token = ""
 repository_name = ""
 repsitory_owner = ""
 
+# Database configuration
+db_name                             = "spotter"
+username                            = "spotter"
+password                            = "Goo7Huen!"
+port                                = 5432
