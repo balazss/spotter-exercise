@@ -199,7 +199,7 @@ module "ecs_cluster" {
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [module.alb_server]
-  source              = "./Modules/ECS/Service"
+  source              = "./modules/ECS/Service"
   name                = "${var.environment_name}-server"
   desired_tasks       = 1
   arn_security_group  = module.security_group_ecs_task_server.sg_id
@@ -214,7 +214,7 @@ module "ecs_service_server" {
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
   depends_on          = [module.alb_client]
-  source              = "./Modules/ECS/Service"
+  source              = "./modules/ECS/Service"
   name                = "${var.environment_name}-client"
   desired_tasks       = 1
   arn_security_group  = module.security_group_ecs_task_client.sg_id
@@ -224,4 +224,24 @@ module "ecs_service_client" {
   subnets_id          = [module.networking.private_subnets_client[0], module.networking.private_subnets_client[1]]
   container_port      = var.port_app_client
   container_name      = var.container_name["client"]
+}
+
+# ------- Creating ECS Autoscaling policies for the server application -------
+module "ecs_autoscaling_server" {
+  depends_on   = [module.ecs_service_server]
+  source       = "./modules/ECS/Autoscaling"
+  name         = "${var.environment_name}-server"
+  cluster_name = module.ecs_cluster.ecs_cluster_name
+  min_capacity = 1
+  max_capacity = 4
+}
+
+# ------- Creating ECS Autoscaling policies for the client application -------
+module "ecs_autoscaling_client" {
+  depends_on   = [module.ecs_service_client]
+  source       = "./modules/ECS/Autoscaling"
+  name         = "${var.environment_name}-client"
+  cluster_name = module.ecs_cluster.ecs_cluster_name
+  min_capacity = 1
+  max_capacity = 4
 }
