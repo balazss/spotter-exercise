@@ -278,3 +278,44 @@ module "policy_devops_role" {
   code_build_projects   = [module.codebuild_client.project_arn, module.codebuild_server.project_arn]
   code_deploy_resources = [module.codedeploy_server.application_arn, module.codedeploy_server.deployment_group_arn, module.codedeploy_client.application_arn, module.codedeploy_client.deployment_group_arn]
 }
+
+# ------- Creating a SNS topic -------
+module "sns" {
+  source   = "./Modules/SNS"
+  sns_name = "sns-${var.environment_name}"
+}
+
+# ------- Creating the server CodeBuild project -------
+module "codebuild_server" {
+  source                 = "./modules/CodeBuild"
+  name                   = "codebuild-${var.environment_name}-server"
+  iam_role               = module.devops_role.arn_role
+  region                 = var.aws_region
+  account_id             = data.aws_caller_identity.id_current_account.account_id
+  ecr_repo_url           = module.ecr_server.ecr_repository_url
+  folder_path            = var.folder_path_server
+  buildspec_path         = var.buildspec_path
+  task_definition_family = module.ecs_taks_definition_server.task_definition_family
+  container_name         = var.container_name["server"]
+  service_port           = var.port_app_server
+  ecs_role               = var.iam_role_name["ecs"]
+  ecs_task_role          = var.iam_role_name["ecs_task_role"]
+  dynamodb_table_name    = module.dynamodb_table.dynamodb_table_name
+}
+
+# ------- Creating the client CodeBuild project -------
+module "codebuild_client" {
+  source                 = "./modules/CodeBuild"
+  name                   = "codebuild-${var.environment_name}-client"
+  iam_role               = module.devops_role.arn_role
+  region                 = var.aws_region
+  account_id             = data.aws_caller_identity.id_current_account.account_id
+  ecr_repo_url           = module.ecr_client.ecr_repository_url
+  folder_path            = var.folder_path_client
+  buildspec_path         = var.buildspec_path
+  task_definition_family = module.ecs_taks_definition_client.task_definition_family
+  container_name         = var.container_name["client"]
+  service_port           = var.port_app_client
+  ecs_role               = var.iam_role_name["ecs"]
+  server_alb_url         = module.alb_server.dns_alb
+}
