@@ -195,3 +195,33 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
+
+# ------- Creating ECS Service server -------
+module "ecs_service_server" {
+  depends_on          = [module.alb_server]
+  source              = "./Modules/ECS/Service"
+  name                = "${var.environment_name}-server"
+  desired_tasks       = 1
+  arn_security_group  = module.security_group_ecs_task_server.sg_id
+  ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
+  arn_target_group    = module.target_group_server_blue.arn_tg
+  arn_task_definition = module.ecs_taks_definition_server.arn_task_definition
+  subnets_id          = [module.networking.private_subnets_server[0], module.networking.private_subnets_server[1]]
+  container_port      = var.port_app_server
+  container_name      = var.container_name["server"]
+}
+
+# ------- Creating ECS Service client -------
+module "ecs_service_client" {
+  depends_on          = [module.alb_client]
+  source              = "./Modules/ECS/Service"
+  name                = "${var.environment_name}-client"
+  desired_tasks       = 1
+  arn_security_group  = module.security_group_ecs_task_client.sg_id
+  ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
+  arn_target_group    = module.target_group_client_blue.arn_tg
+  arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
+  subnets_id          = [module.networking.private_subnets_client[0], module.networking.private_subnets_client[1]]
+  container_port      = var.port_app_client
+  container_name      = var.container_name["client"]
+}
