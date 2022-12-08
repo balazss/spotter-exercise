@@ -62,7 +62,7 @@ variable "ecs_task_role" {
   default     = "null"
 }
 
-variable "db_host" {
+variable "db_endpoint" {
   description = "The endpoint for the RDS instance used by the server application"
   type        = string
   default     = ""

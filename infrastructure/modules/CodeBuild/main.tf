@@ -40,7 +40,7 @@ resource "aws_codebuild_project" "aws_codebuild" {
 
     environment_variable {
       name  = "DB_HOST"
-      value = var.db_host
+      value = var.db_endpoint
     }
 
     environment_variable {
