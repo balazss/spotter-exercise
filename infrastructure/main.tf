@@ -245,3 +245,11 @@ module "ecs_autoscaling_client" {
   min_capacity = 1
   max_capacity = 4
 }
+
+# ------- CodePipeline -------
+
+# ------- Creating Bucket to store CodePipeline artifacts -------
+module "s3_codepipeline" {
+  source      = "./Modules/S3"
+  bucket_name = "codepipeline-${var.aws_region}-${random_id.RANDOM_ID.hex}"
+}
