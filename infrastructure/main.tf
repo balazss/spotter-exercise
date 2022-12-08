@@ -23,9 +23,15 @@ module "networking" {
   name   = var.environment_name
 }
 
-# ------- Networking -------
-module "networking" {
-  source = "./modules/Networking"
-  cidr   = ["10.120.0.0/16"]
-  name   = var.environment_name
+# ------- Creating Target Group for the server ALB blue environment -------
+module "target_group_server_blue" {
+  source              = "./modules/ALB"
+  create_target_group = true
+  name                = "tg-${var.environment_name}-s-b"
+  port                = 80
+  protocol            = "HTTP"
+  vpc                 = module.networking.aws_vpc
+  tg_type             = "ip"
+  health_check_path   = "/health"
+  health_check_port   = var.port_app_server
 }
