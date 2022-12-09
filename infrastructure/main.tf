@@ -32,7 +32,7 @@ module "target_group_server_blue" {
   protocol            = "HTTP"
   vpc                 = module.networking.aws_vpc
   tg_type             = "ip"
-  health_check_path   = "/health"
+  health_check_path   = "/api/health"
   health_check_port   = var.port_app_server
 }
 
@@ -45,7 +45,7 @@ module "target_group_server_green" {
   protocol            = "HTTP"
   vpc                 = module.networking.aws_vpc
   tg_type             = "ip"
-  health_check_path   = "/status"
+  health_check_path   = "/api/health"
   health_check_port   = var.port_app_server
 }
 
