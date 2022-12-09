@@ -14,7 +14,7 @@ phases:
         else
           echo "Server build, adding ECS Task Role to the task definition file"
           sed -i "3i\"taskRoleArn\": \"arn:aws:iam::<AWS_ACCOUNT_ID>:role/<ECS_TASK_ROLE>\"," ./infrastructure/templates/taskdef.json
-          echo "Replacing table name in the server function"          
+          echo "Replacing table name in the server function with ${DB_HOST}"
           sed -i "s|spotterdb:5432|$DB_HOST|g" ./code/server/prisma/.env          
         fi
   build:
