@@ -34,26 +34,26 @@ EOF
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  count              = var.create_ecs_role == true ? 1 : 0
-  name               = var.name_ecs_task_role
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  count = var.create_ecs_role == true ? 1 : 0
+  name  = var.name_ecs_task_role
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      },      
+    ]
+  })
   tags = {
     Name = var.name_ecs_task_role
   }
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
 
   lifecycle {
     create_before_destroy = true
@@ -132,6 +132,17 @@ resource "aws_iam_policy" "policy_for_ecs_task_role" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_iam_policy" "policy_for_exec_role" {
+  count       = var.create_ecs_role == true ? 1 : 0
+  name        = "Policy-${var.name}"
+  description = "IAM Policy for Role ${var.name}"
+  policy      = data.aws_iam_policy_document.role_policy_ecs_task_role.json
+
+  lifecycle {
+    create_before_destroy = true
+  }  
 }
 
 # ------- IAM Policies Attachments -------
