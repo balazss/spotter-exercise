@@ -63,5 +63,4 @@ EXPOSE 4000
 # Generates the Prisma Client
 RUN npx prisma generate
 
-CMD [ "npm", "run", "index.js" ]
-
+CMD [ "node", "index.js" ]
