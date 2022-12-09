@@ -29,7 +29,7 @@ COPY --from=builder ./app/build/ /usr/share/nginx/html
 EXPOSE 3000
 
 WORKDIR /usr/share/nginx/html
-COPY ./env.sh .
+COPY ./env.sh ./
 
 # Add bash
 RUN apk add --no-cache bash
