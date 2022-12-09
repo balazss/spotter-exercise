@@ -13,9 +13,13 @@ phases:
           sed -i "s|http://localhost:4000|$SERVER_ALB_URL|g" ./code/client/.env          
         else
           echo "Server build, adding ECS Task Role to the task definition file"
-          sed -i "3i\"taskRoleArn\": \"arn:aws:iam::<AWS_ACCOUNT_ID>:role/<ECS_TASK_ROLE>\"," ./infrastructure/Templates/taskdef.json
+          sed -i "3i\"taskRoleArn\": \"arn:aws:iam::<AWS_ACCOUNT_ID>:role/<ECS_TASK_ROLE>\"," ./infrastructure/templates/taskdef.json
           echo "Replacing table name in the server function"
-          sed -i "s|spotterdb|$DB_HOST|g" ./code/server/prisma/.env          
+          echo "replacing db host with $DB_HOST 
+          
+          sed -i "s|spotterdb|$DB_HOST|g" ./code/server/prisma/.env
+
+          cat ./code/server/prisma/.env
         fi
   build:
     commands:
