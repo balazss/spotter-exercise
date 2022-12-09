@@ -21,7 +21,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPO_URL $FOLDER_PATH --build-arg NODE_ENV=production
+      - docker build -t $REPO_URL $FOLDER_PATH
   post_build:
     commands:
       - echo Build completed on `date`
