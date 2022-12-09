@@ -77,7 +77,7 @@ function SearchProvider({ children }) {
     dispatch({ type: "FETCH_INIT", payload: { query } });
     try {
       // TODO: This could be moved to a separate file with other API calls
-      const url = `${apiHost}/api/products?${new URLSearchParams({
+      const url = `http://${apiHost}/api/products?${new URLSearchParams({
         query: query,
         offset: offset,
         limit: LIMIT,
