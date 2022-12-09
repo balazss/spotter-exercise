@@ -17,12 +17,12 @@ WORKDIR /app
 # ---------------------------- DEPENDENCIES ----------------------------
 FROM base AS dependencies
 # copies package*.json files
-COPY package*.json .
+COPY package*.json ./
 # copies schema.prisma and .env to generate prisma client while installing modules (https://www.prisma.io/)
-COPY prisma/schema.prisma .
-COPY prisma/.env .
+COPY prisma/schema.prisma ./
+COPY prisma/.env ./
 COPY prisma/migrations ./prisma/migrations
-COPY prisma/wait_for_db.sh .
+COPY prisma/wait_for_db.sh ./
 
 # installs production modules
 ARG NODE_ENV
@@ -50,11 +50,11 @@ ENTRYPOINT ["/tini", "--"]
 # sets NODE_ENV to production
 ENV NODE_ENV --from=dependencies $NODE_ENV
 # copies package*.json files from dependencies stage
-COPY --chown=node:node --from=dependencies /app/package*.json .
+COPY --chown=node:node --from=dependencies /app/package*.json ./
 # copies the production modules from the dependencies stage
 COPY --chown=node:node --from=dependencies /app/node_modules node_modules/
 # copies prisma .env to resolve database credentials from the dependencies image
-COPY --chown=node:node --from=dependencies /app/.env .
+COPY --chown=node:node --from=dependencies /app/.env ./
 # Copies the files from the build image
 COPY --chown=node:node . ./
 
