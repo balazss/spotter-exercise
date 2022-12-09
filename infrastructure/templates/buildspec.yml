@@ -6,6 +6,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - echo Checking for build type
+      - echo ${FOLDER_PATH}
       - |
         if expr "${FOLDER_PATH}" : ".*client*" ; then
           echo "Client build, embedding frontend layer file with ALB backend DNS"
@@ -15,9 +16,7 @@ phases:
           echo "Server build, adding ECS Task Role to the task definition file"
           sed -i "3i\"taskRoleArn\": \"arn:aws:iam::<AWS_ACCOUNT_ID>:role/<ECS_TASK_ROLE>\"," ./infrastructure/Templates/taskdef.json
           echo "Replacing table name in the server function"
-          sed -i "s|spotterdb|$DB_HOST|g" ./code/server/prisma/.env
-          echo "Adding Swagger host"
-          sed -i "s|<SERVER_ALB_URL>|$SERVER_ALB_URL|g" ./code/server/src/swagger/swagger.js #TODO: Update swagger host
+          sed -i "s|spotterdb|$DB_HOST|g" ./code/server/prisma/.env          
         fi
   build:
     commands:
