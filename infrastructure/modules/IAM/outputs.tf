@@ -21,3 +21,9 @@ output "arn_role_ecs_task_role" {
     ? (length(aws_iam_role.ecs_task_role) > 0 ? aws_iam_role.ecs_task_role[0].arn : "")
   : "")
 }
+
+output "devops_role" {
+  value = (var.create_devops_policy == true
+    ? (length(aws_iam_role.devops_role) > 0 ? aws_iam_role.devops_role[0].arn : "")
+  : "")
+}

@@ -8,6 +8,12 @@ resource "aws_codebuild_project" "aws_codebuild" {
   build_timeout = "10"
   service_role  = var.iam_role
 
+  vpc_config {
+    vpc_id             = var.vpc_id
+    subnets            = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
+
   artifacts {
     type = "CODEPIPELINE"
   }

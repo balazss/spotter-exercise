@@ -67,3 +67,21 @@ variable "db_endpoint" {
   type        = string
   default     = ""
 }
+
+variable "vpc_id" {
+  description = "The ID of the VPC where the security group will take place"
+  type        = string
+  default     = ""
+}
+
+variable "security_group_ids" {
+  description = "The security group IDs to attach to the CodeBuild project"
+  type        = list(string)
+  default     = []
+}
+
+variable "subnet_ids" {
+  description = "The subnet IDs to attach to the CodeBuild project"
+  type        = list(string)
+  default     = []
+}
