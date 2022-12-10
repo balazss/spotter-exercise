@@ -13,3 +13,7 @@ output "private_subnets_client" {
 output "private_subnets_server" {
   value = [aws_subnet.private_subnets_server[0].id, aws_subnet.private_subnets_server[1].id]
 }
+
+output "rds_subnet" {
+  value = [aws_subnet.rds_subnet[0].id, aws_subnet.rds_subnet[1].id]
+}

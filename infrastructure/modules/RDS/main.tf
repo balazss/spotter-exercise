@@ -50,3 +50,27 @@ resource "aws_db_subnet_group" "default" {
   description = "Subnet group for prod-db"
   subnet_ids  = var.db_subnets
 }
+
+# resource "aws_security_group" "default" {
+#   name        = "prod-db-security-group"
+#   description = "Security group for prod-db"
+#   vpc_id      = var.vpc_id
+
+#   ingress {
+#     from_port   = var.port
+#     to_port     = var.port
+#     protocol    = "tcp"
+#     cidr_blocks = var.db_subnets
+#   }
+
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+
+#   tags = {
+#     Name = "prod-db-security-group"
+#   }
+# }

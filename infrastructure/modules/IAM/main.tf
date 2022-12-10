@@ -45,7 +45,7 @@ resource "aws_iam_role" "ecs_task_role" {
           Service = "ecs-tasks.amazonaws.com"
         }
         Action = "sts:AssumeRole"
-      },      
+      },
     ]
   })
   tags = {
@@ -142,7 +142,7 @@ resource "aws_iam_policy" "policy_for_exec_role" {
 
   lifecycle {
     create_before_destroy = true
-  }  
+  }
 }
 
 # ------- IAM Policies Attachments -------

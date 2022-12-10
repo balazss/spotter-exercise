@@ -53,6 +53,16 @@ resource "aws_subnet" "private_subnets_server" {
   }
 }
 
+resource "aws_subnet" "rds_subnet" {
+  count             = 2
+  availability_zone = data.aws_availability_zones.az_availables.names[count.index]
+  vpc_id            = aws_vpc.aws_vpc.id
+  cidr_block        = cidrsubnet(aws_vpc.aws_vpc.cidr_block, 7, count.index + 7)
+  tags = {
+    Name = "rds_subnet_${count.index}_${var.name}"
+  }
+}
+
 # ------- Internet Gateway -------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.aws_vpc.id
