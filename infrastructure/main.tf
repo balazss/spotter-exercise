@@ -322,6 +322,7 @@ module "codebuild_server" {
   service_port           = var.port_app_server
   ecs_role               = var.iam_role_name["ecs"]
   ecs_task_role          = var.iam_role_name["ecs_task_role"]
+  server_alb_url         = module.alb_server.dns_alb
   db_endpoint            = module.rds.db_endpoint
   vpc_id                 = module.networking.aws_vpc
   security_group_ids     = [module.security_group_rds_postgres.sg_id]
