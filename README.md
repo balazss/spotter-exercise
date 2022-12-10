@@ -19,9 +19,9 @@
 
 To go directly to the code or infrastructure folders, click on the following links:
 
-[Infrastrure](https://github.com/balazss/spotter-exercise/tree/main/infrastructure/README.md) \
-[Client app](https://github.com/balazss/spotter-exercise/tree/main/code/client/README.md) \
-[Server app](https://github.com/balazss/spotter-exercise/tree/main/code/server/README.md)
+[Infrastructure](https://github.com/balazss/spotter-exercise/tree/main/infrastructure) \
+[Client app](https://github.com/balazss/spotter-exercise/tree/main/code/client) \
+[Server app](https://github.com/balazss/spotter-exercise/tree/main/code/server)
 
 ## Solution overview
 
@@ -98,7 +98,7 @@ The following diagram represents the infrastructure architecture being deployed 
 1. The task definition template (infrastructure/iemplates/taskdef.json) that enables the CodePipeline to execute a Blue/Green deployment in ECS has hardcoded values for the memory and CPU values for the server and client application.
    Feel free to change it, by adding for example a set of `sed` commands in CodeBuild.
 
-2. Some security best practices have been omitted for the sake of simplicity, such as, the database password exposed in the task definition template, the lack of encryption for the S3 bucket, etc. These should be handled in a real-world production environment.
+2. Some security best practices have been omitted for the sake of simplicity, such as, the database password exposed in the task definition template, the lack of encryption for the S3 bucket, .env files commited into the repository etc. These should be handled in a real-world production environment.
 
 ## CI/CD Architecture
 
