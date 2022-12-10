@@ -1,6 +1,6 @@
+import { ItemList } from "components/features/search/itemlist";
 import { Spinner } from "components/ui/spinner/Spinner";
-import { ItemList } from "features/itemlist";
-import { useSearchState, useSearchUpdater } from "utils/SearchContext";
+import { useSearchState, useSearchUpdater } from "contexts/SearchContext";
 
 import {
   StyledH1,

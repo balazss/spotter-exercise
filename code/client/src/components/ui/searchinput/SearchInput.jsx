@@ -1,7 +1,7 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSearchUpdater } from "utils/SearchContext";
-import { useForm } from "utils/useForm";
+import { useSearchUpdater } from "contexts/SearchContext";
+import { useForm } from "hooks/useForm";
 
 import {
   SearchIconWrapper,
