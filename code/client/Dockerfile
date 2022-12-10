@@ -32,8 +32,6 @@ WORKDIR /usr/share/nginx/html
 
 # Add bash
 RUN apk add --no-cache bash
-# Make shell script executable
-RUN chmod +x env.sh
 
 CMD ["/bin/bash", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
 
