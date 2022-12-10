@@ -107,6 +107,15 @@ module "security_group_rds_postgres" {
   # security_groups     = [module.security_group_alb_server.sg_id]
 }
 
+# ------- Creating Security Group for CodeBuild -------
+module "security_group_codebuild" {
+  source      = "./modules/SecurityGroup"
+  name        = "codebuild-${var.environment_name}-sg"
+  description = "Controls access to the CodeBuild"
+  vpc_id      = module.networking.aws_vpc
+  egress_port = 0
+}
+
 
 # ------- Creating Server Application ALB -------
 module "alb_server" {
@@ -133,8 +142,7 @@ module "ecs_role" {
   source             = "./modules/IAM"
   create_ecs_role    = true
   name               = var.iam_role_name["ecs"]
-  name_ecs_task_role = var.iam_role_name["ecs_task_role"]
-  # dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn] #TODO: Change this to RDS
+  name_ecs_task_role = var.iam_role_name["ecs_task_role"]  
 }
 
 # ------- Creating a IAM Policy for role -------
@@ -290,7 +298,7 @@ module "policy_devops_role" {
   create_devops_policy  = true
   ecr_repositories      = [module.ecr_server.ecr_repository_arn, module.ecr_client.ecr_repository_arn]
   code_build_projects   = [module.codebuild_client.project_arn, module.codebuild_server.project_arn]
-  code_deploy_resources = [module.codedeploy_server.application_arn, module.codedeploy_server.deployment_group_arn, module.codedeploy_client.application_arn, module.codedeploy_client.deployment_group_arn]
+  code_deploy_resources = [module.codedeploy_server.application_arn, module.codedeploy_server.deployment_group_arn, module.codedeploy_client.application_arn, module.codedeploy_client.deployment_group_arn] 
 }
 
 # ------- Creating a SNS topic -------
@@ -315,6 +323,13 @@ module "codebuild_server" {
   ecs_role               = var.iam_role_name["ecs"]
   ecs_task_role          = var.iam_role_name["ecs_task_role"]
   db_endpoint            = module.rds.db_endpoint
+  vpc_id                 = module.networking.aws_vpc
+  security_group_ids     = [module.security_group_rds_postgres.sg_id]
+  subnet_ids             = [module.networking.private_subnets_server[0], module.networking.private_subnets_server[1]]
+  depends_on = [
+    module.devops_role
+  ]
+
 }
 
 # ------- Creating the client CodeBuild project -------
@@ -406,7 +421,7 @@ module "rds" {
   storage_encrypted                   = true
 
   multi_az               = false
-  vpc_security_group_ids = [module.security_group_rds_postgres.sg_id, module.security_group_ecs_task_server.sg_id]
+  vpc_security_group_ids = [module.security_group_rds_postgres.sg_id, module.security_group_ecs_task_server.sg_id, module.security_group_codebuild.sg_id]
   db_subnets             = module.networking.rds_subnet
 
   # maintenance_window              = "Mon:00:00-Mon:03:00"

@@ -204,7 +204,8 @@ data "aws_iam_policy_document" "role_policy_devops_role" {
       "codebuild:StartBuild",
       "codebuild:BatchGetBuildBatches",
       "codebuild:StartBuildBatch",
-      "codebuild:StopBuild"
+      "codebuild:StopBuild",
+      "codebuild:DescribeSecurityGroups",
     ]
     resources = var.code_build_projects
   }
@@ -275,6 +276,7 @@ data "aws_iam_policy_document" "role_policy_devops_role" {
       "ecs:ListServices",
       "ecs:ListTasks",
       "ecs:DescribeServices",
+      "ecs:DescribeSecurityGroups",
       "ecs:DescribeTasks",
       "ecs:DescribeTaskDefinition",
       "ecs:DescribeTaskSets",
@@ -312,6 +314,28 @@ data "aws_iam_policy_document" "role_policy_devops_role" {
     ]
     resources = ["*"]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBSecurityGroups",
+      "ec2:CreateNetworkInterface",
+      "ec2:DescribeDhcpOptions",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeVpcs"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    
+    effect = "Allow"
+    actions = [
+      "ec2:CreateNetworkInterfacePermission"
+    ]
+    resources = ["arn:aws:ec2:us-west-2:*:network-interface/*"]    
+  }
 }
 
 data "aws_iam_policy_document" "role_policy_ecs_task_role" {
@@ -331,18 +355,5 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
       "iam:PassRole"
     ]
     resources = ["*"]
-  }
-  # statement {
-  #   sid    = "AllowDynamodbActions"
-  #   effect = "Allow"
-  #   actions = [
-  #     "dynamodb:BatchGetItem",
-  #     "dynamodb:Describe*",
-  #     "dynamodb:List*",
-  #     "dynamodb:GetItem",
-  #     "dynamodb:Query",
-  #     "dynamodb:Scan",
-  #   ]
-  #   resources = var.dynamodb_table
-  # }
+  }  
 }
