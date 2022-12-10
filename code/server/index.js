@@ -1,7 +1,8 @@
 import server from "./src/server.js";
+import logger from "./src/utils/logger.js";
 
 const main = async () => {
-  console.log("Starting server...");
+  logger.info("Starting server...");
   server();
 };
 

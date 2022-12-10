@@ -14,14 +14,19 @@ const options = {
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.prettyPrint(),
+        winston.format.splat(),
+
         // Colorize if the env is not production
-        process.env.NODE_ENV !== "production"
+        process.env.NODE_ENV !== "development"
           ? winston.format.colorize()
-          : winston.format.uncolorize(),
-        winston.format.printf(
-          (info) =>
-            `${info.timestamp} ${info.level}: ${JSON.stringify(info.message)}`
-        )
+          : winston.format.printf(
+              (info) =>
+                `${
+                  info.timestamp
+                } - ${info.level.toUpperCase()}: ${JSON.stringify(
+                  info.message
+                )}`
+            )
       ),
     }),
   ],
