@@ -1,9 +1,9 @@
 import { Toolbar } from "@mui/material";
+import { Results } from "components/features/search/results";
 import { Container, Header } from "components/ui";
 import { Page } from "components/ui/page";
 import { SearchInput } from "components/ui/searchinput";
-import { Results } from "features/results";
-import { SearchProvider } from "utils/SearchContext";
+import { SearchProvider } from "contexts/SearchContext";
 
 export const SearchPage = () => {
   return (

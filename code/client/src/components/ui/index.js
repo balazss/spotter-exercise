@@ -4,3 +4,4 @@ export * from "./container";
 export * from "./appbar";
 export * from "./searchinput";
 export * from "./page";
+export * from "./spinner";
