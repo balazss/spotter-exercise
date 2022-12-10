@@ -33,4 +33,4 @@ WORKDIR /usr/share/nginx/html
 # Add bash
 RUN apk add --no-cache bash
 
-ENTRYPOINT nginx -c /etc/nginx/conf.d/nginx.conf -g "daemon off;"
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
