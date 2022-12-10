@@ -18,7 +18,7 @@ phases:
           sed -i "s|spotterdb:5432|$DB_HOST|g" ./code/server/prisma/.env          
         fi
         - echo Running Prisma migrations if the $FOLDER_PATH is server
-        - |
+      - |
         if expr "${FOLDER_PATH}" : ".*server*" ; then
           echo "Running Prisma migrations"
           npx prisma migrate deploy
