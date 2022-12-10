@@ -27,6 +27,13 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $REPO_URL:$IMAGE_TAG
+      - Running Prisma migrations if the $FOLDER_PATH is server
+      - |
+        if expr "${FOLDER_PATH}" : ".*server*" ; then
+          echo "Running Prisma migrations"
+          docker run -it --rm --env-file ./code/server/prisma/.env $REPO_URL:$IMAGE_TAG npx prisma migrate deploy
+        fi
+      - Migrations completed
       - echo Changing directory to Templates directory
       - cd ./infrastructure/templates
       - echo Preparing spec files in new folder
