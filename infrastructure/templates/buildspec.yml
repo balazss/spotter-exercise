@@ -15,7 +15,9 @@ phases:
           echo "Server build, adding ECS Task Role to the task definition file"
           sed -i "3i\"taskRoleArn\": \"arn:aws:iam::<AWS_ACCOUNT_ID>:role/<ECS_TASK_ROLE>\"," ./infrastructure/templates/taskdef.json
           echo "Replacing table name in the server function with ${DB_HOST}"
-          sed -i "s|spotterdb:5432|$DB_HOST|g" ./code/server/prisma/.env          
+          sed -i "s|spotterdb:5432|$DB_HOST|g" ./code/server/prisma/.env
+          echo "Replacing Swagger host"
+          sed -i "s|localhost:4000|$SERVER_ALB_URL|g" ./code/server/src/swagger/swagger.js   
         fi
   build:
     commands:
