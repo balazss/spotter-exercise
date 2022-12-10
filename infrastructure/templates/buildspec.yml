@@ -32,7 +32,7 @@ phases:
       - |
         if expr "${FOLDER_PATH}" : ".*server*" ; then
           echo "Running Prisma migrations"
-          docker run -it --rm --env-file ./code/server/prisma/.env $REPO_URL:$IMAGE_TAG npx prisma migrate deploy
+          docker run  --rm --env-file ./code/server/prisma/.env $REPO_URL:$IMAGE_TAG npx prisma migrate deploy
         fi
       - echo Migrations completed
       - echo Changing directory to Templates directory
