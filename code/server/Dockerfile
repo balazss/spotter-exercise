@@ -1,5 +1,5 @@
 # ---------------------------- BASE ----------------------------
-FROM node:18.12.1-slim@sha256:b9c3c98eb7cf4a45daceac4cb12880f4529889f6f39a59edc0661aea0bb0880b as base
+FROM node:16.18.1-slim@sha256:4957579844d80f2cc77f5696e981d3ebf6446a31007c925eeb75a66ec7a39c50 as base
 # installs tini (https://github.com/krallin/tini)
 # RUN apt-get update && apt-get install -y tini
 ENV TINI_VERSION v0.19.0

@@ -42,3 +42,9 @@ variable "container_name" {
   description = "The name of the container"
   type        = string
 }
+
+variable "enable_execute_command" {
+  description = "Enable execute command"
+  type        = bool
+  default     = false
+}

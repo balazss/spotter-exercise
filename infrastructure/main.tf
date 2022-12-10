@@ -83,6 +83,7 @@ module "security_group_alb_server" {
   vpc_id              = module.networking.aws_vpc
   cidr_blocks_ingress = ["0.0.0.0/0"]
   ingress_port        = 80
+  security_groups     = [module.security_group_rds_postgres.sg_id]
 }
 
 # ------- Creating Security Group for the client ALB -------
@@ -94,6 +95,18 @@ module "security_group_alb_client" {
   cidr_blocks_ingress = ["0.0.0.0/0"]
   ingress_port        = 80
 }
+
+# ------- Creating Security Group for the Postgres RDS -------
+module "security_group_rds_postgres" {
+  source              = "./modules/SecurityGroup"
+  name                = "rds-${var.environment_name}-postgres"
+  description         = "Controls access to the Postgres RDS"
+  vpc_id              = module.networking.aws_vpc
+  cidr_blocks_ingress = ["0.0.0.0/0"]
+  ingress_port        = 5432
+  # security_groups     = [module.security_group_alb_server.sg_id]
+}
+
 
 # ------- Creating Server Application ALB -------
 module "alb_server" {
@@ -198,17 +211,18 @@ module "ecs_cluster" {
 
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
-  depends_on          = [module.alb_server]
-  source              = "./modules/ECS/Service"
-  name                = "${var.environment_name}-server"
-  desired_tasks       = 1
-  arn_security_group  = module.security_group_ecs_task_server.sg_id
-  ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
-  arn_target_group    = module.target_group_server_blue.arn_tg
-  arn_task_definition = module.ecs_taks_definition_server.arn_task_definition
-  subnets_id          = [module.networking.private_subnets_server[0], module.networking.private_subnets_server[1]]
-  container_port      = var.port_app_server
-  container_name      = var.container_name["server"]
+  depends_on             = [module.alb_server]
+  source                 = "./modules/ECS/Service"
+  name                   = "${var.environment_name}-server"
+  desired_tasks          = 1
+  arn_security_group     = module.security_group_ecs_task_server.sg_id
+  ecs_cluster_id         = module.ecs_cluster.ecs_cluster_id
+  arn_target_group       = module.target_group_server_blue.arn_tg
+  arn_task_definition    = module.ecs_taks_definition_server.arn_task_definition
+  subnets_id             = [module.networking.private_subnets_server[0], module.networking.private_subnets_server[1], module.networking.rds_subnet[0], module.networking.rds_subnet[1]]
+  container_port         = var.port_app_server
+  container_name         = var.container_name["server"]
+  enable_execute_command = true
 }
 
 # ------- Creating ECS Service client -------
@@ -392,8 +406,8 @@ module "rds" {
   storage_encrypted                   = true
 
   multi_az               = false
-  vpc_security_group_ids = [module.security_group_alb_server.sg_id]
-  db_subnets             = module.networking.private_subnets_server
+  vpc_security_group_ids = [module.security_group_rds_postgres.sg_id, module.security_group_ecs_task_server.sg_id]
+  db_subnets             = module.networking.rds_subnet
 
   # maintenance_window              = "Mon:00:00-Mon:03:00"
   # backup_window                   = "03:00-06:00"
