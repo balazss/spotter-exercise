@@ -17,6 +17,13 @@ phases:
           echo "Replacing table name in the server function with ${DB_HOST}"
           sed -i "s|spotterdb:5432|$DB_HOST|g" ./code/server/prisma/.env          
         fi
+        - echo Running Prisma migrations if the $FOLDER_PATH is server
+        - |
+        if expr "${FOLDER_PATH}" : ".*server*" ; then
+          echo "Running Prisma migrations"
+          npx prisma migrate deploy
+        fi
+      - echo Migrations completed
   build:
     commands:
       - echo Build started on `date`
@@ -27,13 +34,7 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $REPO_URL:$IMAGE_TAG
-      - Running Prisma migrations if the $FOLDER_PATH is server
-      - |
-        if expr "${FOLDER_PATH}" : ".*server*" ; then
-          echo "Running Prisma migrations"
-          docker run -it --rm --env-file ./code/server/prisma/.env $REPO_URL:$IMAGE_TAG npx prisma migrate deploy
-        fi
-      - Migrations completed
+      - echo docker image push completed
       - echo Changing directory to Templates directory
       - cd ./infrastructure/templates
       - echo Preparing spec files in new folder
