@@ -100,6 +100,8 @@ The following diagram represents the infrastructure architecture being deployed 
 
 2. Some security best practices have been omitted for the sake of simplicity, such as, the database password exposed in the task definition template, the lack of encryption for the S3 bucket, .env files commited into the repository etc. These should be handled in a real-world production environment.
 
+3. The pipeline in a real-world scenario should be separate for frontend and backend as well as infrastructure. However, for the sake of simplicity, all the code is in the same repository.
+
 ## CI/CD Architecture
 
 The following diagram represents the CI/CD architecture being deployed with this project:
