@@ -9,6 +9,7 @@ import {
 } from "./middlewares/app.middlewares.js";
 import healthRouter from "./routers/health.router.js";
 import productRouter from "./routers/product.router.js";
+import { swaggerRouter } from "./swagger/swagger.js";
 import logger from "./utils/logger.js";
 
 const app = express();
@@ -56,5 +57,6 @@ app.use(
 
 app.use("/api", productRouter);
 app.use("/api", healthRouter);
+app.use("/api", swaggerRouter);
 
 export default app;

@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        NODE_ENV: ${NODE_ENV}
+        NODE_ENV: development
         PORT: ${PORT}
         DB_HOST: ${DB_HOST}
         POSTGRES_USER: ${POSTGRES_USER}
@@ -15,8 +15,6 @@ services:
       - /app/node_modules
     env_file:
       - ./.env.development
-    # command: npm run dev
-    # command: npm run start:migrate:dev
     command: sh ./prisma/wait_for_db.sh ${DB_HOST} ${POSTGRES_USER} npm run start:migrate:dev
     extra_hosts:
       - "host.docker.internal:host-gateway"
