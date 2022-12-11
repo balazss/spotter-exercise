@@ -17,7 +17,7 @@ const options = {
         winston.format.splat(),
 
         // Colorize if the env is not production
-        process.env.NODE_ENV !== "development"
+        process.env.NODE_ENV !== "production"
           ? winston.format.colorize()
           : winston.format.printf(
               (info) =>
