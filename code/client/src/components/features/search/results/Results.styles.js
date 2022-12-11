@@ -21,6 +21,10 @@ export const StyledH2 = styled.h2`
 
 export const StyledResultsContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing(3)};
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    padding: 0 16px;
+  }
 `;
 
 export const StyledItemListLinkWrapper = styled.div`

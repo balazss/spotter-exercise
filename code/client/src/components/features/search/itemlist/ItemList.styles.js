@@ -5,6 +5,10 @@ export const StyledGridRow = styled.div`
   flex-flow: row wrap;
   justify-content: flex-start;
   gap: 24px;
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    justify-content: center;
+  }
 }`;
 
 export const StyledGridItem = styled.div`

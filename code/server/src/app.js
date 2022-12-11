@@ -14,6 +14,8 @@ import logger from "./utils/logger.js";
 
 const app = express();
 
+app.use("/api", swaggerRouter);
+
 app.use(cors());
 app.use(allowedHttpMethods);
 app.use(allowedContentType);
@@ -57,6 +59,5 @@ app.use(
 
 app.use("/api", productRouter);
 app.use("/api", healthRouter);
-app.use("/api", swaggerRouter);
 
 export default app;
