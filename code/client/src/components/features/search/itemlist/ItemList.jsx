@@ -1,4 +1,5 @@
 import { Card } from "components/ui";
+import { useEffect, useRef } from "react";
 
 import {
   StyledGridItem,
@@ -6,13 +7,36 @@ import {
   StyledItemListWrapper,
 } from "./ItemList.styles";
 
-export const ItemList = ({ products }) => {
+export const ItemList = ({ products, scrollRef }) => {
+  const previousLength = useRef(products.length);
+
+  useEffect(() => {
+    if (
+      products.length &&
+      previousLength.current !== 0 &&
+      previousLength.current !== products.length
+    ) {
+      // We can't use scrollIntoView because of the fixed header, so we need to get the bounding client rect of the
+      // scrollRef and scroll to that position.
+      const rect = scrollRef?.current?.getBoundingClientRect();
+      window.scrollTo({
+        top: rect?.top + window.pageYOffset - 120, // Sticky header height plus some margin
+        behavior: "smooth",
+      });
+    }
+
+    previousLength.current = products.length;
+  }, [products.length, scrollRef]);
+
   try {
     return (
       <StyledItemListWrapper>
         <StyledGridRow>
-          {products.map((product) => (
-            <StyledGridItem key={product.id}>
+          {products.map((product, index) => (
+            <StyledGridItem
+              key={product.id}
+              ref={index === previousLength.current ? scrollRef : null}
+            >
               <Card
                 id={product.id}
                 brand={product.vendor}
