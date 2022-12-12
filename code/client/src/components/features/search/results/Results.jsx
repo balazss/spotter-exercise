@@ -1,6 +1,7 @@
 import { ItemList } from "components/features/search/itemlist";
 import { Spinner } from "components/ui/spinner/Spinner";
 import { useSearchState, useSearchUpdater } from "contexts/SearchContext";
+import { useRef } from "react";
 
 import {
   StyledH1,
@@ -13,6 +14,8 @@ import {
 export const Results = () => {
   const { products, count, hasMore, query, loading } = useSearchState();
   const { loadProducts } = useSearchUpdater();
+
+  const scrollRef = useRef(null);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -27,7 +30,9 @@ export const Results = () => {
           Showing {products.length} of {count}
         </StyledH2>
       </StyledResultsContainer>
-      <ItemList products={products} />
+
+      <ItemList products={products} scrollRef={scrollRef} />
+
       <StyledItemListLinkWrapper>
         {hasMore && !loading && products.length > 0 ? (
           <StyledItemListLink
